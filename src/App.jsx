@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import Header from './components/Header'
 import Modal from './components/Modal';
+import ExpensesList from './components/ExpensesList';
+import { generateId } from './helpers';
 import NewExpenseIcon from './img/nuevo-gasto.svg'
 
 function App() {
@@ -22,7 +24,14 @@ function App() {
   }
 
   const saveExpense = expense => {
-    console.log(expense);
+    expense.id = generateId();
+    setExpenses([...expenses, expense])
+
+    setAnimateModal(false)
+
+       setTimeout(() => {
+         setModal(false)
+       }, 500);
   }
 
   return (
@@ -36,13 +45,20 @@ function App() {
 
 
     {isValidBudget && (
-      <div className="nuevo-gasto">
-        <img 
-          src={NewExpenseIcon}
-          alt="new expense icon"
-          onClick={handleNewExpense}
-        />
-      </div>
+      <>
+        <main>
+          <ExpensesList
+            expenses={expenses}
+          />
+        </main>
+        <div className="nuevo-gasto">
+          <img 
+            src={NewExpenseIcon}
+            alt="new expense icon"
+            onClick={handleNewExpense}
+          />
+        </div>
+      </>
     )}
 
     {modal && <Modal 
