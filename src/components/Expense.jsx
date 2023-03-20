@@ -11,8 +11,8 @@ import SubscriptionsIcon from '../img/icono_suscripciones.svg'
 
 const iconsDictionary = {
   savings : SavingsIcon,
-  food : HouseIcon,
-  house : FoodIcon,
+  house : HouseIcon,
+  food : FoodIcon,
   others : OthersIcon,
   hobbies : HobbiesIcon,
   health : HealthIcon,
