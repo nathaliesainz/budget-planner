@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from './components/Header'
 import Modal from './components/Modal';
 import ExpensesList from './components/ExpensesList';
@@ -15,9 +15,22 @@ function App() {
   const [modal, setModal] = useState(false);
   const [animateModal, setAnimateModal] = useState(false);
 
+  const [editExpense, setEditExpense] = useState({});
+  
+  useEffect(() => {
+    if( Object.keys(editExpense).length > 0) {
+        setModal(true)
+
+        setTimeout(() => {
+          setAnimateModal(true)
+    }, 500);
+    }
+  }, [editExpense])
+  
 
   const handleNewExpense = () => {
     setModal(true)
+    setEditExpense({})
 
     setTimeout(() => {
       setAnimateModal(true)
@@ -25,12 +38,16 @@ function App() {
   }
 
   const saveExpense = expense => {
-    expense.id = generateId();
-    expense.date = Date.now();
-    setExpenses([...expenses, expense])
-
+    if (expense.id) {
+      const updatedExpenses = expenses.map( expenseState => expenseState.id === 
+        expense.id ? expense : expenseState)
+        setExpenses(updatedExpenses);
+    } else {
+      expense.id = generateId();
+      expense.date = Date.now();
+      setExpenses([...expenses, expense])
+    }
     setAnimateModal(false)
-
        setTimeout(() => {
          setModal(false)
        }, 500);
@@ -52,6 +69,7 @@ function App() {
         <main>
           <ExpensesList
             expenses={expenses}
+            setEditExpense={setEditExpense}
           />
         </main>
         <div className="nuevo-gasto">
@@ -68,7 +86,8 @@ function App() {
                 setModal={setModal}
                 animateModal={animateModal}
                 setAnimateModal={setAnimateModal}
-                saveExpense={saveExpense} 
+                saveExpense={saveExpense}
+                editExpense={editExpense} 
               /> }
     
     </div>

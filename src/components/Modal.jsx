@@ -1,14 +1,33 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Message from './Message';
 import CloseBtn from '../img/cerrar.svg'
 
-const Modal = ({setModal, animateModal, setAnimateModal, saveExpense}) => {
+const Modal = ({
+    setModal,
+    animateModal,
+    setAnimateModal,
+    saveExpense,
+    editExpense
+  }) => {
 
     const [message, setMessage] = useState('');
     const [name, setName] = useState('');
     const [amount, setAmount] = useState('');
     const [category, setCategory] = useState('');
+    const [date, setDate] = useState('');
+    const [id, setId] = useState('');
 
+    useEffect(() => {
+      if( Object.keys(editExpense).length > 0) {
+        setName(editExpense.name)
+        setAmount(editExpense.amount)
+        setCategory(editExpense.category)
+        setId(editExpense.id)
+        setDate(editExpense.date)
+      }
+    }, []);
+    
+    
     const hideModal = () => {
        setAnimateModal(false)
 
@@ -29,7 +48,7 @@ const Modal = ({setModal, animateModal, setAnimateModal, saveExpense}) => {
           return;
         }
 
-        saveExpense({name, amount, category})
+        saveExpense({name, amount, category, id, date})
     }
 
   return (
@@ -46,7 +65,7 @@ const Modal = ({setModal, animateModal, setAnimateModal, saveExpense}) => {
           onSubmit={handleSubmit} 
           className={`formulario ${animateModal ? "animar" : "cerrar" }`}
         >
-          <legend>New Expense</legend>
+          <legend>{editExpense.name ? 'Edit Expense' : 'New Expense'}</legend>
           {message && <Message tipo="error">{message}</Message> }
 
           <div className="campo">
@@ -92,7 +111,10 @@ const Modal = ({setModal, animateModal, setAnimateModal, saveExpense}) => {
               </select>
           </div>
 
-          <input type="submit" value="Add Expense" />
+          <input 
+              type="submit" 
+              value={editExpense.name ? 'Save Expense' : 'Add Expense'} 
+          />
 
         </form>
     </div>
