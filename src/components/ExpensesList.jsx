@@ -1,5 +1,5 @@
-import React from "react"
-import Expense from "./Expense"
+import React from 'react'
+import Expense from './Expense'
 
 const ExpensesList = ({expenses, setEditExpense, deleteExpense}) => {
   return (
